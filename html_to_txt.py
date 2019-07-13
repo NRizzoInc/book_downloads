@@ -6,9 +6,10 @@ import sys
 import subprocess
 
 # pip necessary modules 
-piped_modules = subprocess.check_output(['pip', 'list']).decode()
-if 'bs4' not in piped_modules: os.system("pip install bs4")
-if 'unidecode' not in piped_modules: os.system("pip install unidecode")
+# pip necessary modules 
+piped_modules = subprocess.check_output(['python', '-m', 'pip', 'list']).decode()
+if 'bs4' not in piped_modules: subprocess.call("python -m pip install bs4")
+if 'unidecode' not in piped_modules: subprocess.call("python -m pip install unidecode")
 
 import urllib.request
 from bs4 import BeautifulSoup
@@ -33,8 +34,10 @@ for url_num, url in enumerate(url_list):
     if url_num == 1: # for some reason enumerate starts from 1
         print("Loading txt from url: " + url_list[0])
     print("Loading txt from url " + url)
-    html = urllib.request.urlopen(url).read()
-    soup = BeautifulSoup(html)
+    # sometimes need to make a request before extracting from url
+    request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    html = urllib.request.urlopen(request).read()
+    soup = BeautifulSoup(html, features="html.parser")
 
     # kill all script and style elements
     for script in soup(["script", "style"]):
@@ -65,7 +68,6 @@ for url_num, url in enumerate(url_list):
     # Use line numbers found to get rid of useless parts of book
     writeable_text = '\n'.join(lines[page_start_index:page_end_index]) # TODO maybe get rid of "book" stuff
     book.append(writeable_text)
-    book_final_copy = '\n'.join(book)
     # print(writeable_text)
 
     # Save results to a file (appends current page to book)- only save every 3
@@ -74,7 +76,7 @@ for url_num, url in enumerate(url_list):
     #    print("Printing on url_num " + str(url_num+1))
 
 name_of_txt_file = "The Eye of the World (Wheel of Time, Book 1)"
-path_to_txt_file = os.path.join(path_to_script_dir, name_of_txt_file)
+path_to_txt_file = os.path.join(path_to_script_dir, 'SavedBooks', name_of_txt_file)
 
 # Save text converted html to a file
 with open(path_to_txt_file, 'w+') as write_file:
