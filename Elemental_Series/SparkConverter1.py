@@ -83,7 +83,7 @@ for url_num, url in enumerate(url_list):
     print(writeable_text)
 
 name_of_txt_file = "Spark (Elemental Series Book 1)"
-path_to_txt_file = os.path.join(path_to_script_dir, 'SavedBooks', name_of_txt_file)
+path_to_txt_file = os.path.join(path_to_script_dir, '..\SavedBooks', name_of_txt_file)
 
 # Save text converted html to a file
 with open(path_to_txt_file, 'w+') as write_file:
