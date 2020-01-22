@@ -5,6 +5,10 @@ import os
 import sys
 import subprocess
 import math
+path_to_script_dir = os.path.dirname(os.path.abspath(__file__))
+path_to_main_dir = os.path.join(path_to_script_dir, "../")
+sys.path.append(path_to_main_dir)
+from numberHelper import * # contains some useful functions 
 from numberHelper import * # contains some useful functions 
 
 # pip necessary modules 
@@ -18,15 +22,16 @@ from unidecode import unidecode
 path_to_script_dir = os.path.dirname(os.path.abspath(__file__))
 
 
-# http://www.readfreenovelsonline.com/spark/page-1-1065772
-url_base = "http://www.readfreenovelsonline.com/spark/page-"
-ending_num_base = 1065772
+# https://novels77.com/storm/page-1-10011805.html
+url_base = "https://novels77.com/storm/page-"
+ending_num_base = 10011805
 url_list = []
 
 # Parse through all urls and add them to list
-for i in range(1, 107): # there are 106 pages (starting from 1 to 106 = 107)
+for i in range(1, 53): # there are 52 pages
+    
     ending_num = ending_num_base + i - 1 # subtract 1 to account for starting at 1 (not zero)  
-    full_url = url_base + "{0}-{1}".format(i, ending_num)
+    full_url = url_base + "{0}-{1}.html".format(i, ending_num)
     url_list.append(full_url)
 
 
@@ -59,20 +64,12 @@ for url_num, url in enumerate(url_list):
 
     # Parse through page and check for key words that mark the beg and end of the page
     # This will always mark the beginining of the page 
-    beg_phrase = "Spark Page {0}\n\n\n\n\n\n\n\n\n\n\n\n".format(url_num+1)
-    
-    # this end phrase comes from the list of chapters of the book
-    if url_num == 0:
-        # first page will not have a "prev" thus it wont appear
-        end_phrase = ""
-    else:
-        end_phrase = "Prev\n"
+    beg_phrase = "Loading..."
 
-    for chapter in range(1, 107): # really goes up to 106
-        end_phrase += "\n{0}".format(chapter)
+    end_phrase = "Loading..."
 
     page_start_index = text.index(beg_phrase) + len(beg_phrase) 
-    page_end_index = text.index(end_phrase)
+    page_end_index = text.index(end_phrase, page_start_index+1)
 
     print("Start index: {0}\nEnd Index: {1}".format(page_start_index, page_end_index))
 
@@ -82,8 +79,13 @@ for url_num, url in enumerate(url_list):
     book.append(writeable_text)
     print(writeable_text)
 
-name_of_txt_file = "Spark (Elemental Series Book 1)"
-path_to_txt_file = os.path.join(path_to_script_dir, '..\SavedBooks', name_of_txt_file)
+name_of_txt_file = "Secret (Elemental Series Book 4)"
+path_to_txt_file = os.path.join(path_to_script_dir, '..\SavedBooks\Elemental Series', name_of_txt_file)
+
+if (not os.path.exists()):
+    print("Folder for this book does not exist! Creating it...")
+    os.makedirs(os.path.dirname(path_to_txt_file))
+
 
 # Save text converted html to a file
 with open(path_to_txt_file, 'w+') as write_file:

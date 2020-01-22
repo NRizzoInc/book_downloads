@@ -5,8 +5,11 @@ import os
 import sys
 import subprocess
 import math
+path_to_script_dir = os.path.dirname(os.path.abspath(__file__))
+path_to_main_dir = os.path.join(path_to_script_dir, "../")
+sys.path.append(path_to_main_dir)
 from numberHelper import * # contains some useful functions 
-
+from numberHelper import * # contains some useful functions 
 
 # pip necessary modules 
 piped_modules = subprocess.check_output(['python', '-m', 'pip', 'list']).decode()
@@ -19,26 +22,19 @@ from unidecode import unidecode
 path_to_script_dir = os.path.dirname(os.path.abspath(__file__))
 
 
-url_base = "http://novel68.com/dune/"
+# https://novels77.com/storm/page-1-10011805.html
+url_base = "https://novels77.com/storm/page-"
+ending_num_base = 10011805
 url_list = []
 
 # Parse through all urls and add them to list
-for i in range(30): # there are thirty chapters
-    # ----- need to convert chapter number to words for url------#
-    chapter_num_in_words = numToWord(i+1)  # book starts from chapter 1, not chapter 0
-    full_url = url_base + 'chapter-' + chapter_num_in_words
+for i in range(1, 53): # there are 52 pages
+    
+    ending_num = ending_num_base + i - 1 # subtract 1 to account for starting at 1 (not zero)  
+    full_url = url_base + "{0}-{1}.html".format(i, ending_num)
     url_list.append(full_url)
 
 
-# add appendixes (there are 4 of them)
-appendix1 = url_base + "appendix-i-the-ecology-of-dune"
-appendix2 = url_base + "appendix-ii-the-religion-of-dune"
-appendix3 = url_base + "appendix-iii-report-on-bene-gesserit"
-appendix4 = url_base + "appendix-iv-the-almanak-en-ashraf"
-url_list.append(appendix1)
-url_list.append(appendix2)
-url_list.append(appendix3)
-url_list.append(appendix4)
 # print(url_list)
 #---------------------------DONE GETTING ALL LINKS-----------------------#
 
@@ -64,29 +60,31 @@ for url_num, url in enumerate(url_list):
     page_end_index = 0
     lines = text.splitlines()
 
-    # print(text)
+    print(text)
 
     # Parse through page and check for key words that mark the beg and end of the page
-    # This will always mark the beginining of the page
-    if url_num == 0:
-        # first page is different
-        beg_phrase = "        Next Book One"
-    else:
-        beg_phrase = "        Next "
-    end_phrase = "Loading...     Prev"
+    # This will always mark the beginining of the page 
+    beg_phrase = "Loading..."
+
+    end_phrase = "Loading..."
+
     page_start_index = text.index(beg_phrase) + len(beg_phrase) 
-    page_end_index = text.index(end_phrase)
+    page_end_index = text.index(end_phrase, page_start_index+1)
 
     print("Start index: {0}\nEnd Index: {1}".format(page_start_index, page_end_index))
 
     # If not the first chapter/page, then dont show title again
     # Use line numbers found to get rid of useless parts of book
-    writeable_text = text[page_start_index:page_end_index]
+    writeable_text = text[page_start_index:page_end_index].rstrip()
     book.append(writeable_text)
-    # print(writeable_text)
+    print(writeable_text)
 
-name_of_txt_file = "Dune (Book 1)"
-path_to_txt_file = os.path.join(path_to_script_dir, 'SavedBooks', name_of_txt_file)
+name_of_txt_file = "Storm (Elemental Series Book 1)"
+path_to_txt_file = os.path.join(path_to_script_dir, '..\SavedBooks\Elemental Series', name_of_txt_file)
+
+if (not os.path.exists()):
+    print("Folder for this book does not exist! Creating it...")
+    os.makedirs(os.path.dirname(path_to_txt_file))
 
 # Save text converted html to a file
 with open(path_to_txt_file, 'w+') as write_file:

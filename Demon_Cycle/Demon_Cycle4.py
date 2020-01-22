@@ -9,7 +9,7 @@ path_to_script_dir = os.path.dirname(os.path.abspath(__file__))
 path_to_main_dir = os.path.join(path_to_script_dir, "../")
 sys.path.append(path_to_main_dir)
 from numberHelper import * # contains some useful functions 
-
+from numberHelper import * # contains some useful functions 
 
 # pip necessary modules 
 piped_modules = subprocess.check_output(['python', '-m', 'pip', 'list']).decode()
@@ -19,17 +19,17 @@ if 'unidecode' not in piped_modules: subprocess.call("python -m pip install unid
 import urllib.request
 from bs4 import BeautifulSoup
 from unidecode import unidecode
+path_to_script_dir = os.path.dirname(os.path.abspath(__file__))
 
-
-# https://novels77.com/spirit/page-1-10011920.html
-url_base = "https://novels77.com/spirit/page-"
-ending_num_base = 10011920
+#https://novel24.com/the-skull-throne-the-demon-cycle-4-s11135-c1.html
+url_base = "https://novel24.com/the-skull-throne-the-demon-cycle-4-s11135-c"
+ending_num_base = 1
 url_list = []
 
 # Parse through all urls and add them to list
-for i in range(1, 44): # there are 43 pages
-    ending_num = ending_num_base + i - 1 # subtract 1 to account for starting at 1 (not zero)  
-    full_url = url_base + "{0}-{1}.html".format(i, ending_num)
+# for i in range(1, 180): # there are 179 pages    
+for i in range(1, 180): # there are 179 pages    
+    full_url = url_base + "{0}.html".format(i)
     url_list.append(full_url)
 
 
@@ -39,7 +39,7 @@ for i in range(1, 44): # there are 43 pages
 
 #-----------------PULL TEXT FROM EACH URL----------------------#
 book = []
-for url_num, url in enumerate(url_list):
+for url_num, url in enumerate(url_list, start=1):
 
     print("Loading txt from url " + url)
     
@@ -58,27 +58,32 @@ for url_num, url in enumerate(url_list):
     page_end_index = 0
     lines = text.splitlines()
 
-    print(text)
+    # print(text)
 
     # Parse through page and check for key words that mark the beg and end of the page
-    # This will always mark the beginining of the page 
-    beg_phrase = "Loading..."
+    # This will always mark the beginning of the page 
+    beg_phrase = "The Skull Throne - Page  {0}/179".format(url_num)
 
-    end_phrase = "Loading..."
+    end_phrase = "-- Advertisement --"
 
     page_start_index = text.index(beg_phrase) + len(beg_phrase) 
     page_end_index = text.index(end_phrase, page_start_index+1)
 
     print("Start index: {0}\nEnd Index: {1}".format(page_start_index, page_end_index))
 
-    # If not the first chapter/page, then dont show title again
+    # If not the first chapter/page, then don't show title again
     # Use line numbers found to get rid of useless parts of book
     writeable_text = text[page_start_index:page_end_index].rstrip()
     book.append(writeable_text)
     print(writeable_text)
 
-name_of_txt_file = "Spirit (Elemental Series Book 2)"
-path_to_txt_file = os.path.join(path_to_script_dir, '..\\SavedBooks', name_of_txt_file)
+name_of_txt_file = "Skull Throne (Demon Cycle Book 4)"
+path_to_txt_file = os.path.join(path_to_script_dir, '..\SavedBooks\DemonCycle', name_of_txt_file)
+
+if (not os.path.exists()):
+    print("Folder for this book does not exist! Creating it...")
+    os.makedirs(os.path.dirname(path_to_txt_file))
+
 
 # Save text converted html to a file
 with open(path_to_txt_file, 'w+') as write_file:

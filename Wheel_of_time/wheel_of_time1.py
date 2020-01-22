@@ -78,6 +78,10 @@ for url_num, url in enumerate(url_list):
 name_of_txt_file = "The Eye of the World (Wheel of Time, Book 1)"
 path_to_txt_file = os.path.join(path_to_script_dir, 'SavedBooks', name_of_txt_file)
 
+if (not os.path.exists()):
+    print("Folder for this book does not exist! Creating it...")
+    os.makedirs(os.path.dirname(path_to_txt_file))
+
 # Save text converted html to a file
 with open(path_to_txt_file, 'w+') as write_file:
     writeable_text = "\n".join(book)
