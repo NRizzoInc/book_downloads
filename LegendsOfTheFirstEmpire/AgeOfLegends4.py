@@ -74,7 +74,7 @@ for url_num, url in enumerate(url_list, start=1):
     book.append(writeable_text)
 
 name_of_txt_file = "Age of Legends (The Legends of the First Empire #4).txt"
-path_to_txt_file = os.path.join(path_to_script_dir, '..', 'SavedBooks', 'The Legends of the First Empire', name_of_txt_file)
+path_to_txt_file = os.path.join(path_to_script_dir, '..', 'SavedBooks', 'Legends of the First Empire', name_of_txt_file)
 
 if (not os.path.exists(os.path.dirname(path_to_txt_file))):
     print("Folder for this book does not exist! Creating it...")
