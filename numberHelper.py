@@ -7,6 +7,20 @@
 
 import math
 
+def extendDigits(value:int, num_digits:int)->str:
+    """ Creates a string that extends a number (with zeros in front)
+        to have the required number of digits 
+
+        Args:
+            value (int): The number to extend
+            num_digits (int): The amount to extend to
+
+        Returns:
+            str: The created string of format 00012 (if passed 12 & 5)
+    """
+    stringified_num = str(value)
+    return '0'*(num_digits - len(stringified_num)) + stringified_num
+
 def numToWord(num):
     '''
         Converts ints into strings
