@@ -1,0 +1,4 @@
+[submodule "WanderingInn"]
+	path = WanderingInn
+    url = git@github.com:NRizzoInc/wandering_inn.git
+    ignore = untracked
