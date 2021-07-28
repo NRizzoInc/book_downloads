@@ -7,7 +7,6 @@ import math
 import subprocess
 import re
 path_to_script_dir = os.path.dirname(os.path.abspath(__file__))
-path_to_main_dir = os.path.join(path_to_script_dir, "..", "..")
 path_to_main_dir = os.path.join(path_to_script_dir, "..")
 sys.path.append(path_to_main_dir)
 from numberHelper import * # contains some useful functions
