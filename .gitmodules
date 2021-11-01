@@ -2,3 +2,6 @@
 	path = WanderingInn
     url = git@github.com:NRizzoInc/wandering_inn.git
     ignore = untracked
+[submodule "royalroad-reader"]
+	path = royalroad-reader
+	url = git@github.com:lpicou/royalroad-reader.git
