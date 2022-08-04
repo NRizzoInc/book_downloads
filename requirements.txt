@@ -3,3 +3,4 @@ bs4
 unidecode
 weasyprint
 joblib
+PyPDF2
