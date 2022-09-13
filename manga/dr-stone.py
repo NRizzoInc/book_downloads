@@ -5,6 +5,7 @@
 '''
 import os
 from typing import List
+import json
 from pathlib import Path
 import multiprocessing
 import weasyprint
@@ -54,10 +55,14 @@ def get_url_list() -> List[str]:
 def save_url(url:str, url_num:int, dst: Path):
     ch_dst:Path = dst / f"Chapter {url_num}.pdf"
     print(f"Loading from url {url} -> {ch_dst}")
-    ch_pdf = weasyprint.HTML(url=url).write_pdf()
-    if ch_pdf != None:
-        open(ch_dst, 'wb').write(ch_pdf)
-    print(f"Finished Downloading Chapter {url_num}")
+    # dont load a page if it already is saved
+    if not os.path.exists(ch_dst):
+        ch_pdf = weasyprint.HTML(url=url).write_pdf()
+        if ch_pdf != None:
+            open(ch_dst, 'wb').write(ch_pdf)
+        print(f"Finished Downloading Chapter {url_num}")
+    else:
+        print(f"Chapter {url_num} already downloaded")
 
 def download_pdfs(pdf_urls: List[str], dst_dir):
     nproc = multiprocessing.cpu_count()
@@ -102,12 +107,12 @@ if __name__ == "__main__":
         os.makedirs(download_dir_path)
 
     url_list = get_url_list()
-    import json
     print(f"url_list = {json.dumps(url_list, indent=2)}")
     # account for already having merged them
     if get_num_pdf_in_dir(download_dir_path) < len(url_list):
         download_pdfs(url_list, download_dir_path)
 
+    print("Merging pdfs into one")
     final_dst:Path = download_dir_path / "Dr-Stone.pdf"
     merge_pdfs(download_dir_path, final_dst)
 
